@@ -5,7 +5,7 @@
 App::App(void)
 	:	BApplication("application/x-vnd.dw-TestApp")
 {
-	MainWindow *mainwin = new MainWindow();
+	ToDo::MainWindow *mainwin = new ToDo::MainWindow();
 	mainwin->Show();
 }
 
