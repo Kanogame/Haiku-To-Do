@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include <Alert.h>
 #include <iostream>
 
 namespace ToDo {
@@ -13,12 +12,22 @@ namespace ToDo {
 		taskDesc = new BTextView(BRect(5, 40, 300, 100), "desc" ,BRect(0, 0, 300, 100), NULL);
 		AddChild(taskDesc);
 		taskDesc->SetText("put shit here");
-		BButton *button = new BButton(BRect(5, 200, 100, 20), "button", "enter", new BMessage(M_BUTTON_ENTER));
+		BButton *button = new BButton(BRect(5, 110, 100, 140), "button", "enter", new BMessage(M_BUTTON_ENTER));
 		AddChild(button);
+		taskList = new BView(BRect(5, 150, 300, 250), "list", 0, 0);
+		taskList->AdoptSystemColors();
+		taskList->Show();
+		AddChild(taskList);
 	}
 
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
+		BView *task = new BView(BRect(0, 0, 300, 40), "shti", 0, 0);
+		task->AddChild(new BStringView(BRect(0, 0, 300, 20), "shit", name));
+		task->AdoptSystemColors();
+		task->Show();
+		taskList->AddChild(task);
+		taskList->Show();
 		DisplayItems();
 	}
 
@@ -28,6 +37,7 @@ namespace ToDo {
 		} 
 		std::cout  << "\n";
 	}
+
 
 	void MainWindow::MessageReceived(BMessage *msg) {
 		switch (msg->what) {

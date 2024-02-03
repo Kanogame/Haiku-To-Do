@@ -3,6 +3,10 @@
 #include <TextControl.h>
 #include <TextView.h>
 #include <Button.h>
+#include <ScrollBar.h>
+#include <View.h>
+#include <StringView.h>
+
 #include <vector> 
 #include <string>
 
@@ -18,13 +22,14 @@ namespace ToDo {
 
 	class MainWindow : public BWindow {
 		public:
-							MainWindow(void);
+				MainWindow(void);
 				void		MessageReceived(BMessage *msg);
 				bool		QuitRequested(void);
 				
 		private:
 				void		DisplayItems();
 				void 		AddNewEntry(const char* name, const char* desc);
+				BView *taskList;
 				std::vector<Item> Items;	
 				BTextControl *taskName;
 				BTextView *taskDesc;
