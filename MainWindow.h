@@ -4,14 +4,15 @@
 #include <TextView.h>
 #include <Button.h>
 #include <vector> 
+#include <string>
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 namespace ToDo {
 	struct Item {
-		const char* name;
-		const char* desc;
+		const std::string name;
+		const std::string desc;
 		bool isChecked;
 	};
 

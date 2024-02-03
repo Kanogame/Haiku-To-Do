@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include <Alert.h>
-#include <stdio.h>
+#include <iostream>
 
 namespace ToDo {
 	enum {
@@ -19,13 +19,14 @@ namespace ToDo {
 
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
+		DisplayItems();
 	}
 
 	void MainWindow::DisplayItems() {
-		printf("%i", Items.size());
 		for (int i = 0; i < Items.size(); i++) {
-			BAlert(Items[i].name, Items[i].desc, "a");
+			std::cout << Items[i].name << "\n";
 		} 
+		std::cout  << "\n";
 	}
 
 	void MainWindow::MessageReceived(BMessage *msg) {
@@ -33,7 +34,6 @@ namespace ToDo {
 			case M_BUTTON_ENTER: {
 				SetTitle(taskName->Text());
 				AddNewEntry(taskName->Text(), taskDesc->Text());
-				DisplayItems();
 				break;
 			}
 			default: {
