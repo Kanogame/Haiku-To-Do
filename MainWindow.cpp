@@ -14,7 +14,7 @@ namespace ToDo {
 		taskDesc->SetText("put shit here");
 		BButton *button = new BButton(BRect(5, 110, 100, 140), "button", "enter", new BMessage(M_BUTTON_ENTER));
 		AddChild(button);
-		taskList = new BView(BRect(5, 150, 300, 250), "list", 0, 0);
+		taskList = new BView(BRect(5, 150, 300, 400), "list", 0, 0);
 		taskList->AdoptSystemColors();
 		taskList->Show();
 		AddChild(taskList);
@@ -22,18 +22,18 @@ namespace ToDo {
 
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
-		BView *task = new BView(BRect(0, 0, 300, 40), "shti", 0, 0);
-		task->AddChild(new BStringView(BRect(0, 0, 300, 20), "shit", name));
-		task->AdoptSystemColors();
-		task->Show();
-		taskList->AddChild(task);
-		taskList->Show();
+		//BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 20), "shti", 0, 0);
+		taskList->AddChild(new BStringView(BRect(0, nextOffset, 300, nextOffset + 20), "shit", name));
+		//task->AdoptSystemColors();
+		//task->Show();
+		//taskList->AddChild(task);
 		DisplayItems();
+		nextOffset += 25;
 	}
 
 	void MainWindow::DisplayItems() {
 		for (int i = 0; i < Items.size(); i++) {
-			std::cout << Items[i].name << "\n";
+			std::cout << Items[i].name <<  "\n";
 		} 
 		std::cout  << "\n";
 	}

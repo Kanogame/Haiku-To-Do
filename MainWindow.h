@@ -33,6 +33,7 @@ namespace ToDo {
 				std::vector<Item> Items;	
 				BTextControl *taskName;
 				BTextView *taskDesc;
+				int nextOffset = 0;
 	};
 }
 #endif
