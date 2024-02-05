@@ -27,6 +27,7 @@ namespace ToDo {
 				bool		QuitRequested(void);
 				
 		private:
+				void 		BuildItem(BView* taskList, const char* name, const char* desc);
 				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();
 				void 		AddNewEntry(const char* name, const char* desc);
