@@ -22,11 +22,12 @@ namespace ToDo {
 
 	class MainWindow : public BWindow {
 		public:
-				MainWindow(void);
+				MainWindow(int width, int height);
 				void		MessageReceived(BMessage *msg);
 				bool		QuitRequested(void);
 				
 		private:
+				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();
 				void 		AddNewEntry(const char* name, const char* desc);
 				BView *taskList;

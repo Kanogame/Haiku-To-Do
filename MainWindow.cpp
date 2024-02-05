@@ -6,15 +6,22 @@ namespace ToDo {
 		M_BUTTON_ENTER = 'btn'
 	};
 
-	MainWindow::MainWindow(void) : BWindow(BRect(100,100,500,400),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
-		taskName = new BTextControl(BRect(5, 5, 300, 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT | B_FOLLOW_RIGHT);
+	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
+		ConstructLayout(height, width, 5); 
+	}
+
+	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {	
+		taskName = new BTextControl(BRect(padding, padding, windowW - padding, 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT | B_FOLLOW_RIGHT);
 		AddChild(taskName);
-		taskDesc = new BTextView(BRect(5, 40, 300, 100), "desc" ,BRect(0, 0, 300, 100), NULL);
-		AddChild(taskDesc);
+		
+		taskDesc = new BTextView(BRect(padding, 30 + padding, windowW - padding, 100), "desc" ,BRect(0, 0, 300, 100), NULL);
 		taskDesc->SetText("put shit here");
-		BButton *button = new BButton(BRect(5, 110, 100, 140), "button", "enter", new BMessage(M_BUTTON_ENTER));
+		AddChild(taskDesc);
+		
+		BButton *button = new BButton(BRect(windowW - 100 - padding, 100 + padding, windowW - padding, 140), "button", "enter", new BMessage(M_BUTTON_ENTER), B_FOLLOW_RIGHT);
 		AddChild(button);
-		taskList = new BView(BRect(5, 150, 300, 400), "list", 0, 0);
+		
+		taskList = new BView(BRect(padding, 140 + padding, windowW - padding, windowH - padding), "list", B_FOLLOW_ALL_SIDES, 0);
 		taskList->AdoptSystemColors();
 		taskList->Show();
 		AddChild(taskList);
