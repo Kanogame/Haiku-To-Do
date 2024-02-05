@@ -22,13 +22,14 @@ namespace ToDo {
 
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
-		//BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 20), "shti", 0, 0);
-		taskList->AddChild(new BStringView(BRect(0, nextOffset, 300, nextOffset + 20), "shit", name));
-		//task->AdoptSystemColors();
-		//task->Show();
-		//taskList->AddChild(task);
+		BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 50), "shti", 0, 0);
+		task->AddChild(new BStringView(BRect(0, 0, 300, 20), "shit", name));
+		task->AddChild(new BStringView(BRect(0, 20, 300, 55), "shit", desc));
+		task->AdoptSystemColors();
+		task->Show();
+		taskList->AddChild(task);
 		DisplayItems();
-		nextOffset += 25;
+		nextOffset += 55;
 	}
 
 	void MainWindow::DisplayItems() {
