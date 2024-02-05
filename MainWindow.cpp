@@ -27,9 +27,9 @@ namespace ToDo {
 		AddChild(taskList);
 	}
 
-	void MainWindow::BuildItem(BView* taskList, const char* name, const char* desc) {
+	void MainWindow::BuildItem(BView* taskList, const char* name, const char* desc, int id) {
 		BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 50), "itemView", 0, 0);
-		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", NULL));
+		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", new BMessage(id)));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 20), "itemName", name));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 55), "itemDesc", desc));
 		task->AdoptSystemColors();
@@ -39,7 +39,7 @@ namespace ToDo {
 
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
-		BuildItem(taskList, name, desc);
+		BuildItem(taskList, name, desc, Items.size() - 1);
 		//DisplayItems();
 		nextOffset += 55;
 	}
@@ -60,6 +60,7 @@ namespace ToDo {
 				break;
 			}
 			default: {
+				std::cout << msg->what << "\n";
 				BWindow::MessageReceived(msg);
 				break;
 			}
