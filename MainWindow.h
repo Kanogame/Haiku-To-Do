@@ -5,6 +5,7 @@
 #include <Button.h>
 #include <ScrollBar.h>
 #include <View.h>
+#include <CheckBox.h>
 #include <StringView.h>
 
 #include <vector> 

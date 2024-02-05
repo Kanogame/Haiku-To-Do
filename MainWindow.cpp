@@ -11,10 +11,10 @@ namespace ToDo {
 	}
 
 	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {	
-		taskName = new BTextControl(BRect(padding, padding, windowW - padding, 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT | B_FOLLOW_RIGHT);
+		taskName = new BTextControl(BRect(padding, padding, windowW - padding, 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT_RIGHT);
 		AddChild(taskName);
 		
-		taskDesc = new BTextView(BRect(padding, 30 + padding, windowW - padding, 100), "desc" ,BRect(0, 0, 300, 100), NULL);
+		taskDesc = new BTextView(BRect(padding, 30 + padding, windowW - padding, 100), "desc" ,BRect(0, 0, 300, 100), B_FOLLOW_LEFT_RIGHT, B_FULL_UPDATE_ON_RESIZE|B_WILL_DRAW|B_PULSE_NEEDED);
 		taskDesc->SetText("put shit here");
 		AddChild(taskDesc);
 		
@@ -29,8 +29,9 @@ namespace ToDo {
 
 	void MainWindow::BuildItem(BView* taskList, const char* name, const char* desc) {
 		BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 50), "itemView", 0, 0);
-		task->AddChild(new BStringView(BRect(0, 0, 300, 20), "itemName", name));
-		task->AddChild(new BStringView(BRect(0, 20, 300, 55), "itemDesc", desc));
+		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", NULL));
+		task->AddChild(new BStringView(BRect(20, 0, 300, 20), "itemName", name));
+		task->AddChild(new BStringView(BRect(20, 0, 300, 55), "itemDesc", desc));
 		task->AdoptSystemColors();
 		task->Show();
 		taskList->AddChild(task);
