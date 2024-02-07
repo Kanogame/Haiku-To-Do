@@ -3,7 +3,8 @@
 
 namespace ToDo {
 	enum {
-		M_BUTTON_ENTER = 'btn'
+		M_BUTTON_ENTER = 'btn',
+		M_CHECK_CHANGE = 'ch'
 	};
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
@@ -29,9 +30,12 @@ namespace ToDo {
 
 	void MainWindow::BuildItem(BView* taskList, const char* name, const char* desc, int id) {
 		BView *task = new BView(BRect(0, nextOffset, 300, nextOffset + 50), "itemView", 0, 0);
-		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", new BMessage(id)));
+		BMessage *msg = new BMessage(M_CHECK_CHANGE);
+		msg->SetInt32("value", id);
+		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", msg));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 20), "itemName", name));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 55), "itemDesc", desc));
+		//size to prefered
 		task->AdoptSystemColors();
 		task->Show();
 		taskList->AddChild(task);
@@ -46,7 +50,7 @@ namespace ToDo {
 
 	void MainWindow::DisplayItems() {
 		for (int i = 0; i < Items.size(); i++) {
-			std::cout << Items[i].name <<  "\n";
+			std::cout << Items[i].name << " | " << Items[i].desc << " | " << Items[i].isChecked << "\n";
 		} 
 		std::cout  << "\n";
 	}
@@ -59,8 +63,16 @@ namespace ToDo {
 				AddNewEntry(taskName->Text(), taskDesc->Text());
 				break;
 			}
+			case M_CHECK_CHANGE: {
+				int value = msg->GetInt32("value", -1);
+				if (value == -1) {
+					break;
+				}
+				Items[value].isChecked = !Items[value].isChecked;
+				DisplayItems();
+				break;
+			}
 			default: {
-				std::cout << msg->what << "\n";
 				BWindow::MessageReceived(msg);
 				break;
 			}

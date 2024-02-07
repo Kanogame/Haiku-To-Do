@@ -7,7 +7,7 @@
 #include <View.h>
 #include <CheckBox.h>
 #include <StringView.h>
-
+#include <ScrollView.h>
 #include <vector> 
 #include <string>
 
