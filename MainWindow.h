@@ -8,6 +8,7 @@
 #include <CheckBox.h>
 #include <StringView.h>
 #include <ScrollView.h>
+#include <File.h>
 #include <vector> 
 #include <string>
 
@@ -28,6 +29,7 @@ namespace ToDo {
 				bool		QuitRequested(void);
 				
 		private:
+				void		ReadFile(const char* filePath);
 				void 		BuildItem(BView* taskList, const char* name, const char* desc, int id);
 				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();

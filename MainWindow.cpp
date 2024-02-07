@@ -8,7 +8,22 @@ namespace ToDo {
 	};
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
-		ConstructLayout(height, width, 5); 
+		ConstructLayout(height, width, 5);
+	       	ReadFile("./absa");	
+	}
+
+	void MainWindow::ReadFile(const char* filePath) {
+		BFile file("./text.txt", B_READ_ONLY);
+		if (file.InitCheck() != B_OK) {
+			std::cout << "bad path\n";	
+		}
+		off_t fileSize = 0;
+		file.GetSize(&fileSize);
+		BString fileData;
+		char *buffer = fileData.LockBuffer(fileSize + 10);
+		file.Read(buffer, fileSize);
+		fileData.UnlockBuffer();
+		std::cout << buffer << "\n";
 	}
 
 	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {	
@@ -35,7 +50,6 @@ namespace ToDo {
 		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", msg));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 20), "itemName", name));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 45), "itemDesc", desc));
-		//size to prefered
 		task->AdoptSystemColors();
 		task->Show();
 		taskList->AddChild(task);
