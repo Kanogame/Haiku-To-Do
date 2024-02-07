@@ -34,7 +34,7 @@ namespace ToDo {
 		msg->SetInt32("value", id);
 		task->AddChild(new BCheckBox(BRect(0, 0, 20, 20), "itemCheckBox", "a", msg));
 		task->AddChild(new BStringView(BRect(20, 0, 300, 20), "itemName", name));
-		task->AddChild(new BStringView(BRect(20, 0, 300, 55), "itemDesc", desc));
+		task->AddChild(new BStringView(BRect(20, 0, 300, 45), "itemDesc", desc));
 		//size to prefered
 		task->AdoptSystemColors();
 		task->Show();
@@ -44,7 +44,6 @@ namespace ToDo {
 	void MainWindow::AddNewEntry(const char* name, const char* desc) {
 		Items.push_back({name, desc, false});
 		BuildItem(taskList, name, desc, Items.size() - 1);
-		//DisplayItems();
 		nextOffset += 55;
 	}
 
@@ -69,7 +68,6 @@ namespace ToDo {
 					break;
 				}
 				Items[value].isChecked = !Items[value].isChecked;
-				DisplayItems();
 				break;
 			}
 			default: {
