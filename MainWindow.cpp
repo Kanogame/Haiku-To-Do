@@ -10,7 +10,7 @@ namespace ToDo {
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
 		ConstructLayout(height, width, 5);
 		SetBar();
-	       	ReadFile("./absa");	
+	       	ReadFile("./save.txt");	
 	}
 
 	void MainWindow::SetBar() {
@@ -25,9 +25,17 @@ namespace ToDo {
 		AddChild(bar);
 	}
 
+	void MainWindow::WriteFile(const char* filepath) {
+		BFile file(filepath, B_WRITE_ONLY);
+		if (file.InitCheck() != B_OK) {
+			std::cout << "bad path\n";
+		}	
+		const char* data = "test";
+		file.Write(data, strlen(data));
+	}
 
 	void MainWindow::ReadFile(const char* filepath) {
-		BFile file("./text.txt", B_READ_ONLY);
+		BFile file(filepath, B_READ_ONLY);
 		if (file.InitCheck() != B_OK) {
 			std::cout << "bad path\n";	
 		}
@@ -37,7 +45,23 @@ namespace ToDo {
 		char *buffer = fileData.LockBuffer(fileSize + 10);
 		file.Read(buffer, fileSize);
 		fileData.UnlockBuffer();
-		std::cout << buffer << "\n";
+		auto data = std::string(buffer);
+		auto res = SplitString(std::string("|"), data);
+		for (int i = 0; i < res.size(); i++) {
+			std::cout << res[i] <<  "\n";
+		}
+	}
+
+	std::vector<std::string> MainWindow::SplitString(std::string delimiter, std::string haystack) {
+		std::vector<std::string> res = {};	
+		size_t next = 0;
+		size_t prev = 0;
+		while ((next = haystack.find(delimiter, prev)) != std::string::npos) {
+			res.push_back(haystack.substr(prev, next-prev));
+			prev = next + 1;
+		}	
+		res.push_back(haystack.substr(prev));
+		return res;
 	}
 
 	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {
