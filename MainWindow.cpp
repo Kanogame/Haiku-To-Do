@@ -9,10 +9,24 @@ namespace ToDo {
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
 		ConstructLayout(height, width, 5);
+		SetBar();
 	       	ReadFile("./absa");	
 	}
 
-	void MainWindow::ReadFile(const char* filePath) {
+	void MainWindow::SetBar() {
+		BMenuBar *bar = new BMenuBar(BRect(), "123");
+		SetKeyMenuBar(bar);
+	       	BMenu *fileDialog = new BMenu("File");	
+		fileDialog->AddItem(new BMenuItem("Open", NULL));	
+		fileDialog->AddItem(new BMenuItem("Save", NULL));	
+		bar->AddItem(fileDialog);	
+		bar->AddItem(new BMenuItem("About", NULL));	
+		bar->Show();
+		AddChild(bar);
+	}
+
+
+	void MainWindow::ReadFile(const char* filepath) {
 		BFile file("./text.txt", B_READ_ONLY);
 		if (file.InitCheck() != B_OK) {
 			std::cout << "bad path\n";	
@@ -26,18 +40,20 @@ namespace ToDo {
 		std::cout << buffer << "\n";
 	}
 
-	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {	
-		taskName = new BTextControl(BRect(padding, padding, windowW - padding, 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT_RIGHT);
+	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {
+		int offset = 20;	
+		taskName = new BTextControl(BRect(padding, offset + padding, windowW - padding, offset + 30), "name", NULL, "put you input here", NULL, B_FOLLOW_LEFT_RIGHT);
 		AddChild(taskName);
-		
-		taskDesc = new BTextView(BRect(padding, 30 + padding, windowW - padding, 100), "desc" ,BRect(0, 0, 300, 100), B_FOLLOW_LEFT_RIGHT, B_FULL_UPDATE_ON_RESIZE|B_WILL_DRAW|B_PULSE_NEEDED);
+		offset += 30;
+		taskDesc = new BTextView(BRect(padding, offset + padding, windowW - padding, offset + 70), "desc" ,BRect(0, 0, 300, 100), B_FOLLOW_LEFT_RIGHT, B_FULL_UPDATE_ON_RESIZE|B_WILL_DRAW|B_PULSE_NEEDED);
 		taskDesc->SetText("put shit here");
 		AddChild(taskDesc);
-		
-		BButton *button = new BButton(BRect(windowW - 100 - padding, 100 + padding, windowW - padding, 140), "button", "enter", new BMessage(M_BUTTON_ENTER), B_FOLLOW_RIGHT);
+		offset += 70;
+		BButton *button = new BButton(BRect(windowW - 100 - padding, offset + padding, windowW - padding, offset + 40), "button", "enter", new BMessage(M_BUTTON_ENTER), B_FOLLOW_RIGHT);
 		AddChild(button);
+		offset += 40;
 		
-		taskList = new BView(BRect(padding, 140 + padding, windowW - padding, windowH - padding), "list", B_FOLLOW_ALL_SIDES, 0);
+		taskList = new BView(BRect(padding, offset + padding, windowW - padding, windowH - padding), "list", B_FOLLOW_ALL_SIDES, 0);
 		taskList->AdoptSystemColors();
 		taskList->Show();
 		AddChild(taskList);
