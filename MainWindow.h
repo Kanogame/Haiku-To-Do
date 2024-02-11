@@ -9,6 +9,7 @@
 #include <StringView.h>
 #include <ScrollView.h>
 #include <File.h>
+#include <FilePanel.h>
 #include <MenuItem.h>
 #include <Menu.h>
 #include <MenuBar.h>
@@ -40,6 +41,8 @@ namespace ToDo {
 				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();
 				void 		AddNewEntry(const char* name, const char* desc);
+				BFilePanel *openFile; 	
+				BFilePanel *saveFile; 
 				BView *taskList;
 				std::vector<Item> Items;	
 				BTextControl *taskName;

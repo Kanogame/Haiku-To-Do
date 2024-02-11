@@ -4,20 +4,24 @@
 namespace ToDo {
 	enum {
 		M_BUTTON_ENTER = 'btn',
-		M_CHECK_CHANGE = 'ch'
+		M_CHECK_CHANGE = 'ch',
+		M_OPEN_FILE = 'of'
 	};
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
 		ConstructLayout(height, width, 5);
 		SetBar();
-	       	ReadFile("./save.txt");	
+	       	ReadFile("./save.txt");
+		BMessenger msgr(NULL, this);
+		openFile = new BFilePanel(B_OPEN_PANEL, &msgr, NULL, 0, false);
+		saveFile = new BFilePanel(B_SAVE_PANEL, &msgr, NULL, 0, false);	
 	}
 
 	void MainWindow::SetBar() {
 		BMenuBar *bar = new BMenuBar(BRect(), "123");
 		SetKeyMenuBar(bar);
 	       	BMenu *fileDialog = new BMenu("File");	
-		fileDialog->AddItem(new BMenuItem("Open", NULL));	
+		fileDialog->AddItem(new BMenuItem("Open", new BMessage(M_OPEN_FILE)));	
 		fileDialog->AddItem(new BMenuItem("Save", NULL));	
 		bar->AddItem(fileDialog);	
 		bar->AddItem(new BMenuItem("About", NULL));	
@@ -124,6 +128,10 @@ namespace ToDo {
 				Items[value].isChecked = !Items[value].isChecked;
 				break;
 			}
+			case M_OPEN_FILE: {
+				openFile->Show();
+				break;
+			} 
 			default: {
 				BWindow::MessageReceived(msg);
 				break;
