@@ -12,6 +12,7 @@
 #include <FilePanel.h>
 #include <MenuItem.h>
 #include <Menu.h>
+#include <Path.h>
 #include <MenuBar.h>
 #include <vector> 
 #include <string>
@@ -36,7 +37,7 @@ namespace ToDo {
 				std::vector<std::string> SplitString(std::string delimiter, std::string haystack);
 				void		SetBar();
 				void		ReadFile(const entry_ref &ref);
-				void		WriteFile(const char* filePath);
+				void		WriteFile(const char* path);
 				void 		BuildItem(BView* taskList, const char* name, const char* desc, int id);
 				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();

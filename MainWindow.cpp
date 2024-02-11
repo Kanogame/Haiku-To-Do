@@ -1,12 +1,15 @@
 #include "MainWindow.h"
 #include <iostream>
+#include <stdio.h>
 
 namespace ToDo {
 	enum {
 		M_BUTTON_ENTER = 'btn',
 		M_CHECK_CHANGE = 'ch',
 		M_SHOW_OPEN_FILE = 'sof',
-		M_OPEN_FILE = 'of'
+		M_SHOW_SAVE_FILE = 'ssf',
+		M_OPEN_FILE = 'of',
+		M_SAVE_FILE = 'sf'
 	};
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
@@ -14,7 +17,7 @@ namespace ToDo {
 		SetBar();
 		BMessenger msgr(NULL, this);
 		openFile = new BFilePanel(B_OPEN_PANEL, &msgr, NULL, 0, false, new BMessage(M_OPEN_FILE));
-		saveFile = new BFilePanel(B_SAVE_PANEL, &msgr, NULL, 0, false);	
+		saveFile = new BFilePanel(B_SAVE_PANEL, &msgr, NULL, 0, false, new BMessage(M_SAVE_FILE));	
 	}
 
 	void MainWindow::SetBar() {
@@ -22,19 +25,20 @@ namespace ToDo {
 		SetKeyMenuBar(bar);
 	       	BMenu *fileDialog = new BMenu("File");	
 		fileDialog->AddItem(new BMenuItem("Open", new BMessage(M_SHOW_OPEN_FILE)));	
-		fileDialog->AddItem(new BMenuItem("Save", NULL));	
+		fileDialog->AddItem(new BMenuItem("Save", new BMessage(M_SHOW_SAVE_FILE)));	
 		bar->AddItem(fileDialog);	
 		bar->AddItem(new BMenuItem("About", NULL));	
 		bar->Show();
 		AddChild(bar);
 	}
 
-	void MainWindow::WriteFile(const char* filepath) {
-		BFile file(filepath, B_WRITE_ONLY);
+	void MainWindow::WriteFile(const char* path) {
+		BFile file(path, B_WRITE_ONLY);
+		std::cout << path << "\n";
 		if (file.InitCheck() != B_OK) {
 			std::cout << "bad path\n";
 		}	
-		const char* data = "test";
+		char data[] = "test|123|asd";
 		file.Write(data, strlen(data));
 	}
 
@@ -138,6 +142,21 @@ namespace ToDo {
 					std::cout << "bad file\n";
 				}
 				ReadFile(ref);
+				break;
+			}
+			case M_SHOW_SAVE_FILE: {
+				saveFile->Show();
+				break;
+			} 
+			case M_SAVE_FILE: {
+				entry_ref dir;
+				BString name;
+				if (msg->FindRef("directory", &dir) == B_OK && msg->FindString("name", &name) == B_OK)
+				{
+					BPath path(&dir);
+					path.Append(name);
+					WriteFile(path.Path());
+				}
 				break;
 			}
 			default: {
