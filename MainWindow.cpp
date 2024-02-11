@@ -5,15 +5,15 @@ namespace ToDo {
 	enum {
 		M_BUTTON_ENTER = 'btn',
 		M_CHECK_CHANGE = 'ch',
+		M_SHOW_OPEN_FILE = 'sof',
 		M_OPEN_FILE = 'of'
 	};
 
 	MainWindow::MainWindow(int width, int height) : BWindow(BRect(100,100,100 + width,100 + height),"Main Window",B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS) {
 		ConstructLayout(height, width, 5);
 		SetBar();
-	       	ReadFile("./save.txt");
 		BMessenger msgr(NULL, this);
-		openFile = new BFilePanel(B_OPEN_PANEL, &msgr, NULL, 0, false);
+		openFile = new BFilePanel(B_OPEN_PANEL, &msgr, NULL, 0, false, new BMessage(M_OPEN_FILE));
 		saveFile = new BFilePanel(B_SAVE_PANEL, &msgr, NULL, 0, false);	
 	}
 
@@ -21,7 +21,7 @@ namespace ToDo {
 		BMenuBar *bar = new BMenuBar(BRect(), "123");
 		SetKeyMenuBar(bar);
 	       	BMenu *fileDialog = new BMenu("File");	
-		fileDialog->AddItem(new BMenuItem("Open", new BMessage(M_OPEN_FILE)));	
+		fileDialog->AddItem(new BMenuItem("Open", new BMessage(M_SHOW_OPEN_FILE)));	
 		fileDialog->AddItem(new BMenuItem("Save", NULL));	
 		bar->AddItem(fileDialog);	
 		bar->AddItem(new BMenuItem("About", NULL));	
@@ -38,8 +38,8 @@ namespace ToDo {
 		file.Write(data, strlen(data));
 	}
 
-	void MainWindow::ReadFile(const char* filepath) {
-		BFile file(filepath, B_READ_ONLY);
+	void MainWindow::ReadFile(const entry_ref &ref) {
+		BFile file(&ref, B_READ_ONLY);
 		if (file.InitCheck() != B_OK) {
 			std::cout << "bad path\n";	
 		}
@@ -128,10 +128,18 @@ namespace ToDo {
 				Items[value].isChecked = !Items[value].isChecked;
 				break;
 			}
-			case M_OPEN_FILE: {
+			case M_SHOW_OPEN_FILE: {
 				openFile->Show();
 				break;
 			} 
+			case M_OPEN_FILE: {
+				entry_ref ref;
+				if (msg->FindRef("refs", &ref) != B_OK) {
+					std::cout << "bad file\n";
+				}
+				ReadFile(ref);
+				break;
+			}
 			default: {
 				BWindow::MessageReceived(msg);
 				break;

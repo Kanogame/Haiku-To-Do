@@ -35,7 +35,7 @@ namespace ToDo {
 		private:
 				std::vector<std::string> SplitString(std::string delimiter, std::string haystack);
 				void		SetBar();
-				void		ReadFile(const char* filePath);
+				void		ReadFile(const entry_ref &ref);
 				void		WriteFile(const char* filePath);
 				void 		BuildItem(BView* taskList, const char* name, const char* desc, int id);
 				void		ConstructLayout(int windowH, int windowW, int padding);
