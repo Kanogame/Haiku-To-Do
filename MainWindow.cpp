@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include <iostream>
 #include <stdio.h>
+#include <sstream>
 
 namespace ToDo {
 	enum {
@@ -38,8 +39,12 @@ namespace ToDo {
 		if (file.InitCheck() != B_OK) {
 			std::cout << "bad path\n";
 		}	
-		char data[] = "test|123|asd";
-		file.Write(data, strlen(data));
+		for (int i = 0; i < Items.size(); i++) {
+			std::stringstream ss;
+			ss << Items[i].name << "|" <<  Items[i].desc << "|" << Items[i].isChecked << "\n";
+			std::string data = ss.str();
+			file.Write(data.c_str(), data.size());
+		}
 	}
 
 	void MainWindow::ReadFile(const entry_ref &ref) {
@@ -53,11 +58,15 @@ namespace ToDo {
 		char *buffer = fileData.LockBuffer(fileSize + 10);
 		file.Read(buffer, fileSize);
 		fileData.UnlockBuffer();
-		auto data = std::string(buffer);
-		auto res = SplitString(std::string("|"), data);
-		for (int i = 0; i < res.size(); i++) {
-			std::cout << res[i] <<  "\n";
+		auto lines = SplitString(std::string("\n"), std::string(buffer));
+		for (int i = 0; i < lines.size(); i++) {	
+			auto res = SplitString(std::string("|"), lines[i]);
+			for (int i = 0; i < res.size(); i++) {
+				std::cout << res[i] <<  " | ";
+			}
+			std::cout <<  "\n";
 		}
+
 	}
 
 	std::vector<std::string> MainWindow::SplitString(std::string delimiter, std::string haystack) {
