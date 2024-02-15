@@ -1,7 +1,4 @@
 #include "MainWindow.h"
-#include <iostream>
-#include <stdio.h>
-#include <sstream>
 
 namespace ToDo {
 	enum {
@@ -31,54 +28,6 @@ namespace ToDo {
 		bar->AddItem(new BMenuItem("About", NULL));	
 		bar->Show();
 		AddChild(bar);
-	}
-
-	void MainWindow::WriteFile(const char* path) {
-		BFile file(path, B_WRITE_ONLY);
-		std::cout << path << "\n";
-		if (file.InitCheck() != B_OK) {
-			std::cout << "bad path\n";
-		}	
-		for (int i = 0; i < Items.size(); i++) {
-			std::stringstream ss;
-			ss << Items[i].name << "|" <<  Items[i].desc << "|" << Items[i].isChecked << "\n";
-			std::string data = ss.str();
-			file.Write(data.c_str(), data.size());
-		}
-	}
-
-	void MainWindow::ReadFile(const entry_ref &ref) {
-		BFile file(&ref, B_READ_ONLY);
-		if (file.InitCheck() != B_OK) {
-			std::cout << "bad path\n";	
-		}
-		off_t fileSize = 0;
-		file.GetSize(&fileSize);
-		BString fileData;
-		char *buffer = fileData.LockBuffer(fileSize + 10);
-		file.Read(buffer, fileSize);
-		fileData.UnlockBuffer();
-		auto lines = SplitString(std::string("\n"), std::string(buffer));
-		for (int i = 0; i < lines.size(); i++) {	
-			auto res = SplitString(std::string("|"), lines[i]);
-			for (int i = 0; i < res.size(); i++) {
-				std::cout << res[i] <<  " | ";
-			}
-			std::cout <<  "\n";
-		}
-
-	}
-
-	std::vector<std::string> MainWindow::SplitString(std::string delimiter, std::string haystack) {
-		std::vector<std::string> res = {};	
-		size_t next = 0;
-		size_t prev = 0;
-		while ((next = haystack.find(delimiter, prev)) != std::string::npos) {
-			res.push_back(haystack.substr(prev, next-prev));
-			prev = next + 1;
-		}	
-		res.push_back(haystack.substr(prev));
-		return res;
 	}
 
 	void MainWindow::ConstructLayout(int windowH, int windowW, int padding) {
@@ -117,14 +66,6 @@ namespace ToDo {
 		BuildItem(taskList, name, desc, Items.size() - 1);
 		nextOffset += 55;
 	}
-
-	void MainWindow::DisplayItems() {
-		for (int i = 0; i < Items.size(); i++) {
-			std::cout << Items[i].name << " | " << Items[i].desc << " | " << Items[i].isChecked << "\n";
-		} 
-		std::cout  << "\n";
-	}
-
 
 	void MainWindow::MessageReceived(BMessage *msg) {
 		switch (msg->what) {

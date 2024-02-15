@@ -1,3 +1,8 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector> 
+
 #include <Window.h>
 #include <Application.h>
 #include <TextControl.h>
@@ -8,14 +13,12 @@
 #include <CheckBox.h>
 #include <StringView.h>
 #include <ScrollView.h>
-#include <File.h>
-#include <FilePanel.h>
 #include <MenuItem.h>
 #include <Menu.h>
 #include <Path.h>
 #include <MenuBar.h>
-#include <vector> 
-#include <string>
+
+#include "Files.h"
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -34,10 +37,7 @@ namespace ToDo {
 				bool		QuitRequested(void);
 				
 		private:
-				std::vector<std::string> SplitString(std::string delimiter, std::string haystack);
 				void		SetBar();
-				void		ReadFile(const entry_ref &ref);
-				void		WriteFile(const char* path);
 				void 		BuildItem(BView* taskList, const char* name, const char* desc, int id);
 				void		ConstructLayout(int windowH, int windowW, int padding);
 				void		DisplayItems();
